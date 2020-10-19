@@ -4,3 +4,4 @@ S3_ENDPOINT_URL=http://minio:9000
 CALLBACK_BUCKET=put-callbacks-here
 ENROLMENT_BUCKET=put-enrolments-here
 COURSE_BUCKET=put-courses-here
+ENROLMENT_AUTHORISATION_BUCKET=put-enrolment-auth-here
