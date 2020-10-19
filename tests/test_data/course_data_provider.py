@@ -1,16 +1,28 @@
 import datetime
 
 from app.domain.entities.course import Course
+from app.requests.filter_by_availabilty_request import FilterByAvailabilityRequest
+from app.requests.filter_by_competency_request import FilterByCompetencyRequest
+from app.requests.filter_by_date_request import FilterByDateRequest
+from app.requests.filter_by_location_request import FilterByLocationRequest
+from app.requests.filter_by_standards_request import FilterByStandardsRequest
 from app.requests.search_course_request import SearchCourseRequest
 
 
 class CourseDataProvider:  # (BaseModel):
     sample_course: Course
     sample_course_dict: dict
-    sample_search_course_request: SearchCourseRequest
-    sample_search_course_request_dict: dict
     sample_course_id: str
     sample_course_date: datetime
+
+    sample_search_course_request: SearchCourseRequest
+    sample_search_course_request_dict: dict
+
+    sample_by_availabilty_request: FilterByAvailabilityRequest
+    sample_by_competency_request: FilterByCompetencyRequest
+    sample_by_date_request: FilterByDateRequest
+    sample_by_location_request: FilterByLocationRequest
+    sample_by_standards_request: FilterByStandardsRequest
 
     def __init__(self):
         # course_id = str(uuid4())
@@ -46,3 +58,16 @@ class CourseDataProvider:  # (BaseModel):
             availability=True,
         )
         self.sample_search_course_request_dict = vars(self.sample_search_course_request)
+
+        # Filters Requests
+        self.sample_by_availabilty_request = FilterByAvailabilityRequest(
+            availability=True
+        )
+        self.sample_by_competency_request = FilterByCompetencyRequest(
+            competency="top rated"
+        )
+        self.sample_by_date_request = FilterByDateRequest(date=date)
+        self.sample_by_location_request = FilterByLocationRequest(location="Sydney")
+        self.sample_by_standards_request = FilterByStandardsRequest(
+            industry_standards="Police Check"
+        )
