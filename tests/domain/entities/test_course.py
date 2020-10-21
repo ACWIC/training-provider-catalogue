@@ -10,7 +10,7 @@ def test_course_init():
     """
     course_id = str(uuid4())
     created = datetime.datetime.now()
-    date = datetime.datetime.now()
+    start_date = datetime.datetime.now()
 
     course = Course(
         course_id=course_id,
@@ -18,7 +18,7 @@ def test_course_init():
         industry_standards="Police Check",
         competency="top rated",
         location="Sydney",
-        date=date,
+        start_date=start_date,
         availability=True,
         hours_per_week=10,
         duration="2 months",
@@ -31,7 +31,7 @@ def test_course_init():
     assert course.industry_standards == "Police Check"
     assert course.competency == "top rated"
     assert course.location == "Sydney"
-    assert course.date == date
+    assert course.start_date == start_date
     assert course.availability is True
     assert course.hours_per_week == 10
     assert course.duration == "2 months"
