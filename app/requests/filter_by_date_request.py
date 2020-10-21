@@ -5,4 +5,5 @@ from app.requests import ValidRequest
 
 
 class FilterByDateRequest(ValidRequest):
-    date: Optional[datetime]
+    from_date: Optional[datetime]
+    to_date: Optional[datetime]

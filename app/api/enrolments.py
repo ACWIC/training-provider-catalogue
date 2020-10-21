@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter
 
 from app.repositories.s3_course_repo import S3CourseRepo
@@ -22,10 +24,8 @@ course_repo = S3CourseRepo()
 enrolment_repo = S3EnrolmentRepo()
 
 
-@router.post("/search_course/{course_filter}")
-def search_course(
-    inputs: SearchCourseRequest,
-):
+@router.post("/search_course/")
+def search_course(inputs: Optional[SearchCourseRequest]):
     """
     Search Courses using filters
     """

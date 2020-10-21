@@ -25,6 +25,22 @@ def test_search_course_success():
     assert response.type == "Success"
 
 
+def test_search_course_success_empty():
+    """
+    When searching a course,
+    if everything goes according to plan,
+    the response type should be "Success".
+    """
+    repo = mock.Mock(spec=CourseRepo)
+    request = CourseDataProvider().sample_search_course_request
+    use_case = SearchCourse(course_repo=repo)
+
+    repo.search_course.return_value = {"courses_list": []}
+    response = use_case.execute(request)
+
+    assert response.type == "Success"
+
+
 def test_search_course_failure():
     """
     When searching a course,

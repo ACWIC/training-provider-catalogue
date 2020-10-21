@@ -8,9 +8,12 @@ def test_create_course_request():
     When a NewCourseRequest is instantiated,
     the resulting object should have correct attribute values.
     """
-    date = datetime.datetime.now()
+    from_date = datetime.datetime.now()
+    to_date = datetime.datetime.now()
     request = FilterByDateRequest(
-        date=date,
+        from_date=from_date,
+        to_date=to_date,
     )
 
-    assert request.date == date
+    assert request.from_date == from_date
+    assert request.to_date == to_date

@@ -9,7 +9,7 @@ class Course(BaseModel):
     industry_standards: str
     competency: str
     location: str
-    date: datetime
+    start_date: datetime
     availability: bool
     hours_per_week: float
     duration: str
