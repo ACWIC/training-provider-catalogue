@@ -2,13 +2,13 @@
 
 This is a python FastAPI app that is built to run on AWS Lambda
 via the API Gateway.
-It should also be able to run on other platfroms
+It should also be able to run on other platforms
 (such as MS Azure, or any platform supporting docker containers)
 although those are not currently being actively tested
 by the development team. 
 
 Deployments are managed with the `serverless` tool,
-which manges dealing underlying plaform.
+which manges dealing underlying platform.
 
 It can also run locally with `serverless-offline`
 in a mode which mimics API Gateway/lambda infrastructure.
@@ -53,7 +53,7 @@ There's two expected environment variables:
 
 `STAGE_PREFIX`: API gateways add a prefix after the domain, but it's not passed down to the service.
 But if the service is called from a Javascript application like swagger UI, the prefix has be provided.
-`STAGE_PREFIX` should is expected to be provided by the serverless runner.
+`STAGE_PREFIX` is expected to be provided by the serverless runner.
 
 
 `SERVICE_PREFIX`: When deploying more than one service under the same API gateway, a prefix is used to
