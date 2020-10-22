@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.repositories.s3_course_repo import S3CourseRepo
 from app.repositories.s3_enrolment_repo import S3EnrolmentRepo
@@ -31,6 +31,8 @@ def search_course(inputs: Optional[SearchCourseRequest]):
     """
     use_case = SearchCourse(course_repo=course_repo)
     response = use_case.execute(inputs)
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
     return response
 
 
@@ -43,6 +45,8 @@ def search_course_by_availability(
     """
     use_case = FilterCourseByAvailabilty(course_repo=course_repo)
     response = use_case.execute(inputs)
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
     return response
 
 
@@ -55,6 +59,8 @@ def search_course_by_competency(
     """
     use_case = FilterCourseByCompetency(course_repo=course_repo)
     response = use_case.execute(inputs)
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
     return response
 
 
@@ -67,6 +73,8 @@ def search_course_by_date(
     """
     use_case = FilterCourseByDate(course_repo=course_repo)
     response = use_case.execute(inputs)
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
     return response
 
 
@@ -79,6 +87,8 @@ def search_course_by_location(
     """
     use_case = FilterCourseByLocation(course_repo=course_repo)
     response = use_case.execute(inputs)
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
     return response
 
 
@@ -91,6 +101,8 @@ def search_course_by_standards(
     """
     use_case = FilterCourseByStandards(course_repo=course_repo)
     response = use_case.execute(inputs)
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
     return response
 
 
@@ -113,4 +125,6 @@ def create_enrolment(inputs: NewEnrolmentRequest):
     use_case = CreateNewEnrolment(enrolment_repo=enrolment_repo)
     response = use_case.execute(inputs)
 
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
     return response

@@ -7,18 +7,21 @@ def test_course_init():
     """
     Ensure the course filters data matches constructor values
     """
-    date = datetime.datetime.now()
+    from_date = datetime.datetime.now()
+    to_date = datetime.datetime.now().now()
 
-    course = CourseFilters(
+    course_filters = CourseFilters(
         industry_standards="Police Check",
         competency="top rated",
         location="Sydney",
-        date=date,
+        from_date=from_date,
+        to_date=to_date,
         availability=True,
     )
 
-    assert course.industry_standards == "Police Check"
-    assert course.competency == "top rated"
-    assert course.location == "Sydney"
-    assert course.date == date
-    assert course.availability is True
+    assert course_filters.industry_standards == "Police Check"
+    assert course_filters.competency == "top rated"
+    assert course_filters.location == "Sydney"
+    assert course_filters.from_date == from_date
+    assert course_filters.to_date == to_date
+    assert course_filters.availability is True
