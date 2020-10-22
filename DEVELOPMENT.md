@@ -10,7 +10,7 @@ See DEPLOYMENT.md for instructions on running
 a local development environment using docker-compose
 
 We work in GitHub with a pull-request workflow,
-and require all PR's to be reviewd before merging.
+and require all PR's to be reviewed before merging.
 There are also guard-rails preventing merges
 that violate test coverage or code style policies,
 or failing tests.
