@@ -5,6 +5,7 @@ import boto3
 
 from app.config import settings
 from app.domain.entities.course import Course
+from app.domain.entities.course_filters import CourseFilters
 from app.repositories.course_repo import CourseRepo
 from app.utils.error_handling import handle_s3_errors
 
@@ -21,8 +22,8 @@ class S3CourseRepo(CourseRepo):
         }
         self.s3 = boto3.client("s3", **self.params)
 
-    def search_course(self, course_filters: dict):
-        print("search_course", course_filters)
+    def search_course(self, course_filters: CourseFilters):
+        course_filters = vars(course_filters)
         with handle_s3_errors():
             courses_objects_list = self.s3.list_objects(Bucket=settings.COURSE_BUCKET)
         courses_list = []

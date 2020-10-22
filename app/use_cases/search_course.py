@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
+from app.domain.entities.course_filters import CourseFilters
 from app.repositories.course_repo import CourseRepo
-from app.requests.search_course_request import SearchCourseRequest
 from app.responses import ResponseFailure, ResponseSuccess
 
 
@@ -14,11 +14,11 @@ class SearchCourse(BaseModel):
         # that it will just check that the value isinstance of this class.
         arbitrary_types_allowed = True
 
-    def execute(self, search_course_request: SearchCourseRequest):
+    def execute(self, course_filters: CourseFilters):
         try:
-            course_filters = vars(search_course_request)
             course = self.course_repo.search_course(course_filters=course_filters)
+            message = "Courses with with filters = " + str(course_filters)
         except Exception as e:
             return ResponseFailure.build_from_resource_error(message=e)
 
-        return ResponseSuccess(value=course)
+        return ResponseSuccess(value=course, message=message)

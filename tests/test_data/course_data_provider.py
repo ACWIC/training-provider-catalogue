@@ -1,12 +1,7 @@
 import datetime
 
 from app.domain.entities.course import Course
-from app.requests.filter_by_availabilty_request import FilterByAvailabilityRequest
-from app.requests.filter_by_competency_request import FilterByCompetencyRequest
-from app.requests.filter_by_date_request import FilterByDateRequest
-from app.requests.filter_by_location_request import FilterByLocationRequest
-from app.requests.filter_by_standards_request import FilterByStandardsRequest
-from app.requests.search_course_request import SearchCourseRequest
+from app.domain.entities.course_filters import CourseFilters
 
 
 class CourseDataProvider:  # (BaseModel):
@@ -15,14 +10,12 @@ class CourseDataProvider:  # (BaseModel):
     sample_course_id: str
     sample_course_start_date: datetime
 
-    sample_search_course_request: SearchCourseRequest
-    sample_search_course_request_dict: dict
-
-    sample_by_availabilty_request: FilterByAvailabilityRequest
-    sample_by_competency_request: FilterByCompetencyRequest
-    sample_by_date_request: FilterByDateRequest
-    sample_by_location_request: FilterByLocationRequest
-    sample_by_standards_request: FilterByStandardsRequest
+    sample_search_course_dict: dict
+    sample_by_availabilty_dict: dict
+    sample_by_competency_dict: dict
+    sample_by_date_dict: dict
+    sample_by_location_dict: dict
+    sample_by_standards_dict: dict
 
     def __init__(self):
         # course_id = str(uuid4())
@@ -53,40 +46,38 @@ class CourseDataProvider:  # (BaseModel):
         self.sample_course_dict = vars(self.sample_course)
 
         # SearchCourseRequest Sample
-        self.sample_search_course_request = SearchCourseRequest(
-            industry_standards="Police Check",
-            competency="top rated",
-            location="Sydney",
-            from_date=from_date,
-            to_date=to_date,
-            availability=True,
-        )
-        self.sample_search_course_request_dict = vars(self.sample_search_course_request)
+        self.sample_search_course_dict = {
+            "industry_standards": "Police Check",
+            "competency": "top rated",
+            "location": "Sydney",
+            "from_date": from_date,
+            "to_date": to_date,
+            "availability": True,
+        }
+        self.sample_search_course = CourseFilters(**self.sample_search_course_dict)
         # sample#2
-        self.sample_search_course_request1 = SearchCourseRequest(
-            industry_standards="Police Check",
-            competency="top rated",
-            location="Sydney",
-            from_date=from_date,
-            to_date=to_date,
-            availability=False,
-        )
-        self.sample_search_course_request_dict1 = vars(
-            self.sample_search_course_request1
-        )
+        self.sample_search_course_dict1 = {
+            "industry_standards": "Medical Check",
+            "competency": "rising talent",
+            "location": "Grafton",
+            "from_date": from_date,
+            "to_date": to_date,
+            "availability": False,
+        }
+        self.sample_search_course1 = CourseFilters(**self.sample_search_course_dict1)
 
         # Filters Requests
-        self.sample_by_availabilty_request = FilterByAvailabilityRequest(
-            availability=True
-        )
-        self.sample_by_competency_request = FilterByCompetencyRequest(
-            competency="top rated"
-        )
-        self.sample_by_date_request = FilterByDateRequest(
-            from_date=from_date,
-            to_date=to_date,
-        )
-        self.sample_by_location_request = FilterByLocationRequest(location="Sydney")
-        self.sample_by_standards_request = FilterByStandardsRequest(
-            industry_standards="Police Check"
-        )
+        self.sample_by_availabilty_dict = {"availability": True}
+        self.sample_by_competency_dict = {"competency": "top rated"}
+        self.sample_by_date_dict = {
+            "from_date": from_date,
+            "to_date": to_date,
+        }
+        self.sample_by_location_dict = {"location": "Sydney"}
+        self.sample_by_standards_dict = {"industry_standards": "Police Check"}
+
+        self.sample_by_availabilty = CourseFilters(**self.sample_by_availabilty_dict)
+        self.sample_by_competency = CourseFilters(**self.sample_by_competency_dict)
+        self.sample_by_date = CourseFilters(**self.sample_by_date_dict)
+        self.sample_by_location = CourseFilters(**self.sample_by_location_dict)
+        self.sample_by_standards = CourseFilters(**self.sample_by_standards_dict)

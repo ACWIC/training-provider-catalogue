@@ -7,7 +7,6 @@ of the appropriate type.
 """
 from unittest.mock import patch
 
-# from app.repositories.course_repo import CourseRepo
 import app.repositories.course_repo
 from app.config import settings
 from app.repositories.s3_course_repo import S3CourseRepo, filters_match
@@ -34,7 +33,7 @@ def test_search_course(boto_client, json_loads):
     repo = S3CourseRepo()
     settings.COURSE_BUCKET = "some-bucket"
     course = CourseDataProvider().sample_course_dict
-    request = CourseDataProvider().sample_search_course_request_dict
+    request = CourseDataProvider().sample_search_course
 
     boto_client.return_value.list_objects = list_objects_sample_content
     json_loads.return_value = course
@@ -60,7 +59,7 @@ def test_search_course_empty_list(boto_client, json_loads):
     repo = S3CourseRepo()
     settings.COURSE_BUCKET = "some-bucket"
     course = CourseDataProvider().sample_course_dict
-    request = CourseDataProvider().sample_search_course_request_dict1
+    request = CourseDataProvider().sample_search_course
 
     boto_client.return_value.list_objects = list_objects_sample_content_empty
     json_loads.return_value = course
@@ -71,8 +70,8 @@ def test_search_course_empty_list(boto_client, json_loads):
 
 def test_filters_match():
     course = CourseDataProvider().sample_course_dict
-    course_filters = CourseDataProvider().sample_search_course_request_dict
-    course_filters1 = CourseDataProvider().sample_search_course_request_dict1
+    course_filters = CourseDataProvider().sample_search_course_dict
+    course_filters1 = CourseDataProvider().sample_search_course_dict1
 
     assert filters_match(course, course_filters)
     assert not filters_match(course, course_filters1)

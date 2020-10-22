@@ -1,16 +1,12 @@
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 
+from app.domain.entities.course_filters import CourseFilters
 from app.repositories.s3_course_repo import S3CourseRepo
 from app.repositories.s3_enrolment_repo import S3EnrolmentRepo
 from app.requests.enrolment_requests import NewEnrolmentRequest
-from app.requests.filter_by_availabilty_request import FilterByAvailabilityRequest
-from app.requests.filter_by_competency_request import FilterByCompetencyRequest
-from app.requests.filter_by_date_request import FilterByDateRequest
-from app.requests.filter_by_location_request import FilterByLocationRequest
-from app.requests.filter_by_standards_request import FilterByStandardsRequest
-from app.requests.search_course_request import SearchCourseRequest
 from app.use_cases.create_new_enrolment import CreateNewEnrolment
 from app.use_cases.filter_by_availability import FilterCourseByAvailabilty
 from app.use_cases.filter_by_competency import FilterCourseByCompetency
@@ -24,11 +20,27 @@ course_repo = S3CourseRepo()
 enrolment_repo = S3EnrolmentRepo()
 
 
-@router.post("/search_course/")
-def search_course(inputs: Optional[SearchCourseRequest]):
+@router.get("/search_course/")
+def search_course(
+    industry_standards: Optional[str] = None,
+    competency: Optional[str] = None,
+    location: Optional[str] = None,
+    from_date: Optional[datetime] = None,
+    to_date: Optional[datetime] = None,
+    availability: Optional[bool] = None,
+):
     """
     Search Courses using filters
     """
+    inputs = {
+        "industry_standards": industry_standards,
+        "competency": competency,
+        "location": location,
+        "from_date": from_date,
+        "to_date": to_date,
+        "availability": availability,
+    }
+    inputs = CourseFilters(**inputs)
     use_case = SearchCourse(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -36,27 +48,35 @@ def search_course(inputs: Optional[SearchCourseRequest]):
     return response
 
 
-@router.post("/search_course/by_availability/{course_filter}")
-def search_course_by_availability(
-    inputs: FilterByAvailabilityRequest,
+@router.get("/search_course_by_standards/")
+def search_course_by_standards(
+    industry_standards: Optional[str] = None,
 ):
     """
     Search Courses using filters
     """
-    use_case = FilterCourseByAvailabilty(course_repo=course_repo)
+    inputs = {
+        "industry_standards": industry_standards,
+    }
+    inputs = CourseFilters(**inputs)
+    use_case = FilterCourseByStandards(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
         raise HTTPException(status_code=response.type.value, detail=response.message)
     return response
 
 
-@router.post("/search_course/by_competency/{course_filter}")
+@router.get("/search_course_by_competency/")
 def search_course_by_competency(
-    inputs: FilterByCompetencyRequest,
+    competency: Optional[str] = None,
 ):
     """
     Search Courses using filters
     """
+    inputs = {
+        "competency": competency,
+    }
+    inputs = CourseFilters(**inputs)
     use_case = FilterCourseByCompetency(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -64,27 +84,17 @@ def search_course_by_competency(
     return response
 
 
-@router.post("/search_course/by_date/{course_filter}")
-def search_course_by_date(
-    inputs: FilterByDateRequest,
-):
-    """
-    Search Courses using filters
-    """
-    use_case = FilterCourseByDate(course_repo=course_repo)
-    response = use_case.execute(inputs)
-    if bool(response) is False:  # If request failed
-        raise HTTPException(status_code=response.type.value, detail=response.message)
-    return response
-
-
-@router.post("/search_course/by_location/{course_filter}")
+@router.get("/search_course_by_location/")
 def search_course_by_location(
-    inputs: FilterByLocationRequest,
+    location: Optional[str] = None,
 ):
     """
     Search Courses using filters
     """
+    inputs = {
+        "location": location,
+    }
+    inputs = CourseFilters(**inputs)
     use_case = FilterCourseByLocation(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -92,14 +102,38 @@ def search_course_by_location(
     return response
 
 
-@router.post("/search_course/by_standards/{course_filter}")
-def search_course_by_standards(
-    inputs: FilterByStandardsRequest,
+@router.get("/search_course_by_date/")
+def search_course_by_date(
+    from_date: Optional[datetime] = None,
+    to_date: Optional[datetime] = None,
 ):
     """
     Search Courses using filters
     """
-    use_case = FilterCourseByStandards(course_repo=course_repo)
+    inputs = {
+        "from_date": from_date,
+        "to_date": to_date,
+    }
+    inputs = CourseFilters(**inputs)
+    use_case = FilterCourseByDate(course_repo=course_repo)
+    response = use_case.execute(inputs)
+    if bool(response) is False:  # If request failed
+        raise HTTPException(status_code=response.type.value, detail=response.message)
+    return response
+
+
+@router.get("/search_course_by_availability/")
+def search_course_by_availability(
+    availability: Optional[bool] = None,
+):
+    """
+    Search Courses using filters
+    """
+    inputs = {
+        "availability": availability,
+    }
+    inputs = CourseFilters(**inputs)
+    use_case = FilterCourseByAvailabilty(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
         raise HTTPException(status_code=response.type.value, detail=response.message)
@@ -124,7 +158,6 @@ def create_enrolment(inputs: NewEnrolmentRequest):
     """
     use_case = CreateNewEnrolment(enrolment_repo=enrolment_repo)
     response = use_case.execute(inputs)
-
     if bool(response) is False:  # If request failed
         raise HTTPException(status_code=response.type.value, detail=response.message)
     return response

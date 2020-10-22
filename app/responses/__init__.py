@@ -1,12 +1,18 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from pydantic.typing import Literal
+
+
+class SuccessType(str, Enum):
+    SUCCESS = "200-Success"
 
 
 class FailureType(str, Enum):
-    RESOURCE_ERROR = "ResourceError"
-    SYSTEM_ERROR = "SystemError"
+    PARAMETER_ERROR = "400-PARAMETER ERROR"
+    UNAUTHORISED_ERROR = "401-UNAUTHORISED ERROR "
+    RESOURCE_ERROR = "404-Resource Error"
+    VALIDATION_ERROR = "422-VALIDATION ERROR"
+    SYSTEM_ERROR = "500-SYSTEM ERROR"
 
 
 class ResponseFailure(BaseModel):
@@ -32,10 +38,23 @@ class ResponseFailure(BaseModel):
     def build_from_system_error(cls, message=None):
         return cls(type=FailureType.SYSTEM_ERROR, message=cls._format_message(message))
 
+    @classmethod
+    def validation_error(cls, message=None):
+        return cls(
+            type=FailureType.VALIDATION_ERROR, message=cls._format_message(message)
+        )
+
+    @classmethod
+    def build_from_unauthorised_error(cls, message=None):
+        return cls(
+            type=FailureType.UNAUTHORISED_ERROR, message=cls._format_message(message)
+        )
+
 
 class ResponseSuccess(BaseModel):
-    type: Literal["Success"] = "Success"
     value: dict
+    type = SuccessType.SUCCESS
+    message: str = "Success"
 
     def __bool__(self):
         return True
