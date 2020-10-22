@@ -17,8 +17,8 @@ class SearchCourse(BaseModel):
     def execute(self, search_course_request: SearchCourseRequest):
         try:
             course_filters = vars(search_course_request)
-            course_id = self.course_repo.search_course(course_filters=course_filters)
+            course = self.course_repo.search_course(course_filters=course_filters)
         except Exception as e:
             return ResponseFailure.build_from_resource_error(message=e)
 
-        return ResponseSuccess(value=course_id)
+        return ResponseSuccess(value=course)

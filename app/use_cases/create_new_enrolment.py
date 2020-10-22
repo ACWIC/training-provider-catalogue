@@ -19,7 +19,7 @@ class CreateNewEnrolment(BaseModel):
             enrolment_authorisation = self.enrolment_repo.save_enrolment(
                 request.course_id, request.student_id
             )
-        except Exception as e:  # noqa - TODO: handle specific failure types
+        except Exception as e:
             return ResponseFailure.build_from_resource_error(message=e)
 
         return ResponseSuccess(value=enrolment_authorisation)

@@ -7,6 +7,8 @@ of the appropriate type.
 """
 from unittest.mock import patch
 
+# from app.repositories.course_repo import CourseRepo
+import app.repositories.course_repo
 from app.config import settings
 from app.repositories.s3_course_repo import S3CourseRepo, filters_match
 from tests.test_data.course_data_provider import CourseDataProvider
@@ -74,6 +76,12 @@ def test_filters_match():
 
     assert filters_match(course, course_filters)
     assert not filters_match(course, course_filters1)
+
+
+def test_course_repo():
+    assert (
+        "search_course" in app.repositories.course_repo.CourseRepo.__abstractmethods__
+    )
 
 
 def list_objects_sample_content(Bucket):
