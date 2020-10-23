@@ -16,10 +16,11 @@ def test_search_course_success():
     """
     repo = mock.Mock(spec=CourseRepo)
     course = CourseDataProvider().sample_course
+    course_list = {"courses_list": [course]}
     request = CourseDataProvider().sample_by_standards
     use_case = FilterCourseByStandards(course_repo=repo)
 
-    repo.search_course.return_value = course
+    repo.search_course.return_value = course_list
     response = use_case.execute(request)
 
     assert response.type == "200-Success"
