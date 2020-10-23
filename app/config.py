@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     S3_SECRET_ACCESS_KEY: Optional[str]
     S3_ENDPOINT_URL: Optional[str]
     ENROLMENT_AUTHORISATION_BUCKET: str
+    COURSE_BUCKET: str
 
     @functools.cached_property
     def s3_configuration(self) -> dict:

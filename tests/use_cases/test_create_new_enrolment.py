@@ -7,6 +7,7 @@ from uuid import uuid4
 from app.domain.entities.enrolment_authorisation import EnrolmentAuthorisation
 from app.repositories.enrolment_repo import EnrolmentRepo
 from app.requests.enrolment_requests import NewEnrolmentRequest
+from app.responses import FailureType, SuccessType
 from app.use_cases.create_new_enrolment import CreateNewEnrolment
 
 
@@ -14,7 +15,7 @@ def test_create_new_enrolment_authorisation_success():
     """
     When creating a new enrollment authorisation,
     if everything goes according to plan,
-    the response type should be "Success".
+    the response type should be "200-Success".
     """
     repo = mock.Mock(spec=EnrolmentRepo)
     enrolment = EnrolmentAuthorisation(uuid=uuid4(), course_id="123", student_id="abc")
@@ -24,14 +25,14 @@ def test_create_new_enrolment_authorisation_success():
     use_case = CreateNewEnrolment(enrolment_repo=repo)
     response = use_case.execute(request)
 
-    assert response.type == "Success"
+    assert response.type == SuccessType.SUCCESS
 
 
 def test_create_new_enrolment_authorisation_failure():
     """
     When creating a new enrollment authorisation,
     if there is some kind of error,
-    the response type should be "ResourceError".
+    the response type should be "404-Resource Error".
     """
     repo = mock.Mock(spec=EnrolmentRepo)
 
@@ -40,4 +41,4 @@ def test_create_new_enrolment_authorisation_failure():
     use_case = CreateNewEnrolment(enrolment_repo=repo)
     response = use_case.execute(request)
 
-    assert response.type == "ResourceError"
+    assert response.type == FailureType.RESOURCE_ERROR
