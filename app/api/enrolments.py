@@ -3,7 +3,6 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 
-from app.domain.entities.course_filters import CourseFilters
 from app.repositories.s3_course_repo import S3CourseRepo
 from app.repositories.s3_enrolment_repo import S3EnrolmentRepo
 from app.requests.enrolment_requests import NewEnrolmentRequest
@@ -40,7 +39,6 @@ def search_course(
         "to_date": to_date,
         "availability": availability,
     }
-    inputs = CourseFilters(**inputs)
     use_case = SearchCourse(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -58,7 +56,6 @@ def search_course_by_standards(
     inputs = {
         "industry_standards": industry_standards,
     }
-    inputs = CourseFilters(**inputs)
     use_case = FilterCourseByStandards(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -76,7 +73,6 @@ def search_course_by_competency(
     inputs = {
         "competency": competency,
     }
-    inputs = CourseFilters(**inputs)
     use_case = FilterCourseByCompetency(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -94,7 +90,6 @@ def search_course_by_location(
     inputs = {
         "location": location,
     }
-    inputs = CourseFilters(**inputs)
     use_case = FilterCourseByLocation(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -114,7 +109,6 @@ def search_course_by_date(
         "from_date": from_date,
         "to_date": to_date,
     }
-    inputs = CourseFilters(**inputs)
     use_case = FilterCourseByDate(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
@@ -132,7 +126,6 @@ def search_course_by_availability(
     inputs = {
         "availability": availability,
     }
-    inputs = CourseFilters(**inputs)
     use_case = FilterCourseByAvailabilty(course_repo=course_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed

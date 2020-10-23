@@ -14,8 +14,9 @@ class FilterCourseByStandards(BaseModel):
         # that it will just check that the value isinstance of this class.
         arbitrary_types_allowed = True
 
-    def execute(self, course_filters: CourseFilters):
+    def execute(self, course_filters: dict):
         try:
+            course_filters = CourseFilters(**course_filters)
             course = self.course_repo.search_course(course_filters=course_filters)
             message = "Courses with Industry Standards = " + str(
                 course_filters.industry_standards
