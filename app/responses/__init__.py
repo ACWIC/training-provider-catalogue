@@ -59,6 +59,18 @@ class ResponseFailure(BaseModel):
             message=cls._format_message("UNAUTHORISED_ERROR: " + str(message)),
         )
 
+    @classmethod
+    def validation_error(cls, message=None):
+        return cls(
+            type=FailureType.VALIDATION_ERROR, message=cls._format_message(message)
+        )
+
+    @classmethod
+    def build_from_unauthorised_error(cls, message=None):
+        return cls(
+            type=FailureType.UNAUTHORISED_ERROR, message=cls._format_message(message)
+        )
+
 
 class ResponseSuccess(BaseModel):
     value: dict
