@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 
 class CourseFilters(BaseModel):
-    industry_standards: Optional[str]
-    competency: Optional[str]
+    industry_standards: Optional[list]
+    competency: Optional[list]
     location: Optional[str]
     from_date: Optional[datetime]
     to_date: Optional[datetime]

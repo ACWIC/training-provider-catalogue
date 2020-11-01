@@ -19,10 +19,10 @@ course_repo = S3CourseRepo()
 enrolment_repo = S3EnrolmentRepo()
 
 
-@router.get("/search_course/")
+@router.post("/search_course/")
 def search_course(
-    industry_standards: Optional[str] = None,
-    competency: Optional[str] = None,
+    industry_standards: Optional[list] = None,
+    competency: Optional[list] = None,
     location: Optional[str] = None,
     from_date: Optional[datetime] = None,
     to_date: Optional[datetime] = None,
@@ -46,9 +46,9 @@ def search_course(
     return response
 
 
-@router.get("/search_course_by_standards/")
+@router.post("/search_course_by_standards/")
 def search_course_by_standards(
-    industry_standards: Optional[str] = None,
+    industry_standards: Optional[list] = None,
 ):
     """
     Search Courses using filters
@@ -63,9 +63,9 @@ def search_course_by_standards(
     return response
 
 
-@router.get("/search_course_by_competency/")
+@router.post("/search_course_by_competency/")
 def search_course_by_competency(
-    competency: Optional[str] = None,
+    competency: Optional[list] = None,
 ):
     """
     Search Courses using filters
@@ -80,7 +80,7 @@ def search_course_by_competency(
     return response
 
 
-@router.get("/search_course_by_location/")
+@router.post("/search_course_by_location/")
 def search_course_by_location(
     location: Optional[str] = None,
 ):
@@ -97,7 +97,7 @@ def search_course_by_location(
     return response
 
 
-@router.get("/search_course_by_date/")
+@router.post("/search_course_by_date/")
 def search_course_by_date(
     from_date: Optional[datetime] = None,
     to_date: Optional[datetime] = None,
@@ -116,7 +116,7 @@ def search_course_by_date(
     return response
 
 
-@router.get("/search_course_by_availability/")
+@router.post("/search_course_by_availability/")
 def search_course_by_availability(
     availability: Optional[bool] = None,
 ):

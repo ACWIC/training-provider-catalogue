@@ -11,16 +11,16 @@ def test_course_init():
     to_date = datetime.datetime.now().now()
 
     course_filters = CourseFilters(
-        industry_standards="Police Check",
-        competency="top rated",
+        industry_standards=["Police Check", "Security check"],
+        competency=["top rated", "experienced"],
         location="Sydney",
         from_date=from_date,
         to_date=to_date,
         availability=True,
     )
 
-    assert course_filters.industry_standards == "Police Check"
-    assert course_filters.competency == "top rated"
+    assert course_filters.industry_standards == ["Police Check", "Security check"]
+    assert course_filters.competency == ["top rated", "experienced"]
     assert course_filters.location == "Sydney"
     assert course_filters.from_date == from_date
     assert course_filters.to_date == to_date

@@ -33,8 +33,8 @@ class CourseDataProvider:  # (BaseModel):
         self.sample_course = Course(
             course_id=course_id,
             course_name="Bachelor of Community Services (HE20528)",
-            industry_standards="Police Check",
-            competency="top rated",
+            industry_standards=["Police Check", "Security check"],
+            competency=["top rated", "experienced"],
             location="Sydney",
             start_date=start_date,
             availability=True,
@@ -47,8 +47,8 @@ class CourseDataProvider:  # (BaseModel):
 
         # SearchCourseRequest Sample
         self.sample_search_course_dict = {
-            "industry_standards": "Police Check",
-            "competency": "top rated",
+            "industry_standards": ["Police Check", "Security check"],
+            "competency": ["top rated", "experienced"],
             "location": "Sydney",
             "from_date": from_date,
             "to_date": to_date,
@@ -57,8 +57,8 @@ class CourseDataProvider:  # (BaseModel):
         self.sample_search_course = CourseFilters(**self.sample_search_course_dict)
         # sample#2
         self.sample_search_course_dict1 = {
-            "industry_standards": "Medical Check",
-            "competency": "rising talent",
+            "industry_standards": ["Police Check", "Security check"],
+            "competency": ["top rated", "experienced"],
             "location": "Grafton",
             "from_date": from_date,
             "to_date": to_date,
@@ -68,13 +68,15 @@ class CourseDataProvider:  # (BaseModel):
 
         # Filters Requests
         self.sample_by_availabilty_dict = {"availability": True}
-        self.sample_by_competency_dict = {"competency": "top rated"}
+        self.sample_by_competency_dict = {"competency": ["top rated", "experienced"]}
         self.sample_by_date_dict = {
             "from_date": from_date,
             "to_date": to_date,
         }
         self.sample_by_location_dict = {"location": "Sydney"}
-        self.sample_by_standards_dict = {"industry_standards": "Police Check"}
+        self.sample_by_standards_dict = {
+            "industry_standards": ["Police Check", "Security check"]
+        }
 
         self.sample_by_availabilty = CourseFilters(**self.sample_by_availabilty_dict)
         self.sample_by_competency = CourseFilters(**self.sample_by_competency_dict)

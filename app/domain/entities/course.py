@@ -6,8 +6,8 @@ from pydantic import BaseModel
 class Course(BaseModel):
     course_id: str
     course_name: str
-    industry_standards: str
-    competency: str
+    industry_standards: list
+    competency: list
     location: str
     start_date: datetime
     availability: bool

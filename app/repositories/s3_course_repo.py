@@ -15,23 +15,14 @@ class S3CourseRepo(CourseRepo):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.params = {
-            "aws_access_key_id": settings.S3_ACCESS_KEY_ID,
-            "aws_secret_access_key": settings.S3_SECRET_ACCESS_KEY,
-            "endpoint_url": settings.S3_ENDPOINT_URL,
-        }
-        self.s3 = boto3.client("s3", **self.params)
+        self.s3 = boto3.client("s3", **settings.s3_configuration)
 
     def search_course(self, course_filters: CourseFilters):
         course_filters = vars(course_filters)
         with handle_s3_errors():
             courses_objects_list = self.s3.list_objects(Bucket=settings.COURSE_BUCKET)
         courses_list = []
-        if (
-            "Contents" not in courses_objects_list
-        ):  # If no courses, the list should be empty.
-            return {"courses_list": courses_list}
-        for courses_object in courses_objects_list["Contents"]:
+        for courses_object in courses_objects_list.get("Contents", []):
             with handle_s3_errors():
                 courses_object = self.s3.get_object(
                     Key=courses_object["Key"], Bucket=settings.COURSE_BUCKET
@@ -58,13 +49,13 @@ def filters_match(course, course_filters):
             date_in_range = True
     # Keep only those keys that are mutual in both
     # course and course_filters and are not None
-    compare_course = dict(
-        (k, v)
-        for k, v in course.items()
-        if k in course_filters and course_filters[k] is not None
-    )
+    compare_course = {
+        k: v for (k, v) in course.items() if course_filters.get(k) not in [None, [None]]
+    }
     course_filters = dict(
-        (k, v) for k, v in course_filters.items() if k in course and v is not None
+        (k, v)
+        for k, v in course_filters.items()
+        if k in course and v not in [None, [None]]
     )
     # final check
     if compare_course == course_filters and date_in_range:

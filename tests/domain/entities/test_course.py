@@ -15,8 +15,8 @@ def test_course_init():
     course = Course(
         course_id=course_id,
         course_name="Bachelor of Community Services (HE20528)",
-        industry_standards="Police Check",
-        competency="top rated",
+        industry_standards=["Police Check", "Security check"],
+        competency=["top rated", "experienced"],
         location="Sydney",
         start_date=start_date,
         availability=True,
@@ -28,8 +28,8 @@ def test_course_init():
 
     assert course.course_id == course_id
     assert course.course_name == "Bachelor of Community Services (HE20528)"
-    assert course.industry_standards == "Police Check"
-    assert course.competency == "top rated"
+    assert course.industry_standards == ["Police Check", "Security check"]
+    assert course.competency == ["top rated", "experienced"]
     assert course.location == "Sydney"
     assert course.start_date == start_date
     assert course.availability is True

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 from app.domain.entities.course_filters import CourseFilters
 from app.repositories.course_repo import CourseRepo
-from app.responses import ResponseFailure, ResponseSuccess
+from app.responses import ResponseFailure, ResponseSuccess, SuccessType
 
 
 class FilterCourseByStandards(BaseModel):
@@ -18,10 +18,11 @@ class FilterCourseByStandards(BaseModel):
         try:
             course_filters = CourseFilters(**course_filters)
             course = self.course_repo.search_course(course_filters=course_filters)
+            code = SuccessType.SUCCESS
             message = "Courses with Industry Standards = " + str(
                 course_filters.industry_standards
             )
         except Exception as e:
             return ResponseFailure.build_from_resource_error(message=e)
 
-        return ResponseSuccess(value=course, message=message)
+        return ResponseSuccess(value=course, message=message, type=code)
