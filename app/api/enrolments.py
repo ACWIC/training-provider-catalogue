@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from app.repositories.s3_course_repo import S3CourseRepo
 from app.repositories.s3_enrolment_repo import S3EnrolmentRepo
@@ -19,10 +19,10 @@ course_repo = S3CourseRepo()
 enrolment_repo = S3EnrolmentRepo()
 
 
-@router.post("/search_course/")
+@router.get("/search_course/")
 def search_course(
-    industry_standards: Optional[list] = None,
-    competency: Optional[list] = None,
+    industry_standards: Optional[List[str]] = Query(None),
+    competency: Optional[List[str]] = Query(None),
     location: Optional[str] = None,
     from_date: Optional[datetime] = None,
     to_date: Optional[datetime] = None,
@@ -46,9 +46,9 @@ def search_course(
     return response
 
 
-@router.post("/search_course_by_standards/")
+@router.get("/search_course_by_standards/")
 def search_course_by_standards(
-    industry_standards: Optional[list] = None,
+    industry_standards: Optional[List[str]] = Query(None),
 ):
     """
     Search Courses using filters
@@ -63,9 +63,9 @@ def search_course_by_standards(
     return response
 
 
-@router.post("/search_course_by_competency/")
+@router.get("/search_course_by_competency/")
 def search_course_by_competency(
-    competency: Optional[list] = None,
+    competency: Optional[List[str]] = Query(None),
 ):
     """
     Search Courses using filters
@@ -80,7 +80,7 @@ def search_course_by_competency(
     return response
 
 
-@router.post("/search_course_by_location/")
+@router.get("/search_course_by_location/")
 def search_course_by_location(
     location: Optional[str] = None,
 ):
@@ -97,7 +97,7 @@ def search_course_by_location(
     return response
 
 
-@router.post("/search_course_by_date/")
+@router.get("/search_course_by_date/")
 def search_course_by_date(
     from_date: Optional[datetime] = None,
     to_date: Optional[datetime] = None,
@@ -116,7 +116,7 @@ def search_course_by_date(
     return response
 
 
-@router.post("/search_course_by_availability/")
+@router.get("/search_course_by_availability/")
 def search_course_by_availability(
     availability: Optional[bool] = None,
 ):
