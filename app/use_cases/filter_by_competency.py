@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 from app.domain.entities.course_filters import CourseFilters
 from app.repositories.course_repo import CourseRepo
-from app.responses import ResponseFailure, ResponseSuccess, SuccessType
+from app.responses import ResponseFailure, ResponseSuccess
 
 
 class FilterCourseByCompetency(BaseModel):
@@ -18,9 +18,8 @@ class FilterCourseByCompetency(BaseModel):
         try:
             course_filters = CourseFilters(**course_filters)
             course = self.course_repo.search_course(course_filters=course_filters)
-            code = SuccessType.SUCCESS
             message = "Courses with Competency = " + str(course_filters.competency)
         except Exception as e:
             return ResponseFailure.build_from_resource_error(message=e)
 
-        return ResponseSuccess(value=course, message=message, type=code)
+        return ResponseSuccess(value=course, message=message)

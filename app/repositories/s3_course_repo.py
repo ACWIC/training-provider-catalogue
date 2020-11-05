@@ -50,12 +50,10 @@ def filters_match(course, course_filters):
     # Keep only those keys that are mutual in both
     # course and course_filters and are not None
     compare_course = {
-        k: v for (k, v) in course.items() if course_filters.get(k) not in [None, [None]]
+        k: v for (k, v) in course.items() if course_filters.get(k) is not None
     }
     course_filters = dict(
-        (k, v)
-        for k, v in course_filters.items()
-        if k in course and v not in [None, [None]]
+        (k, v) for k, v in course_filters.items() if k in course and v is not None
     )
     # final check
     if compare_course == course_filters and date_in_range:
