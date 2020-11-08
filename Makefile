@@ -17,6 +17,3 @@ up:
 
 down:
 	docker-compose -f local.yml down
-
-precom:
-    pre-commit run -a

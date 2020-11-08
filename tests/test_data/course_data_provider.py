@@ -83,3 +83,57 @@ class CourseDataProvider:  # (BaseModel):
         self.sample_by_date = CourseFilters(**self.sample_by_date_dict)
         self.sample_by_location = CourseFilters(**self.sample_by_location_dict)
         self.sample_by_standards = CourseFilters(**self.sample_by_standards_dict)
+
+        # start date
+        self.course_start_date_in_range = {
+            "start_date": datetime.datetime.strptime(
+                "2018-06-05 08:15:27.243860", "%Y-%m-%d %H:%M:%S.%f"
+            ),
+        }
+        self.course_start_date_not_in_range = {
+            "start_date": datetime.datetime.strptime(
+                "2018-06-15 08:15:27.243860", "%Y-%m-%d %H:%M:%S.%f"
+            ),
+        }
+        self.course_filters_start_date_in_range = {
+            "from_date": datetime.datetime.strptime(
+                "2018-06-01 08:15:27.243860", "%Y-%m-%d %H:%M:%S.%f"
+            ),
+            "to_date": datetime.datetime.strptime(
+                "2018-06-10 08:15:27.243860", "%Y-%m-%d %H:%M:%S.%f"
+            ),
+        }
+        self.course_filters_start_date_none = {
+            "from_date": None,
+            "to_date": None,
+        }
+
+        # standards
+        self.course_standards_competency_subset = {
+            "competency": ["A", "B"],
+            "industry_standards": ["C", "D"],
+        }
+        self.course_filters_standards_competency_subset = {
+            "competency": ["A"],
+            "industry_standards": None,
+        }
+        self.course_standards_subset = {
+            "competency": ["A", "B"],
+            "industry_standards": ["C", "D"],
+        }
+        self.course_filters_standards_subset = {
+            "competency": None,
+            "industry_standards": ["E"],
+        }
+        self.course_filters_standards_none = {
+            "competency": None,
+            "industry_standards": None,
+        }
+        self.course_standards_not_subset = {
+            "competency": ["A", "B"],
+            "industry_standards": ["C", "D"],
+        }
+        self.course_filters_standards_not_subset = {
+            "competency": ["E", "F"],
+            "industry_standards": ["G", "H"],
+        }

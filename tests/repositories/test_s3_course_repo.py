@@ -9,7 +9,12 @@ from unittest.mock import patch
 
 import app.repositories.course_repo
 from app.config import settings
-from app.repositories.s3_course_repo import S3CourseRepo, filters_match
+from app.repositories.s3_course_repo import (
+    S3CourseRepo,
+    filters_match,
+    if_dates_in_range,
+    if_subset_competency_or_standard,
+)
 from tests.test_data.course_data_provider import CourseDataProvider
 
 test_data = CourseDataProvider()
@@ -75,6 +80,31 @@ def test_filters_match():
 
     assert filters_match(course, course_filters)
     assert not filters_match(course, course_filters1)
+
+
+def test_if_dates_in_range():
+    course = test_data.course_start_date_in_range
+    course_filters = test_data.course_filters_start_date_in_range
+    assert if_dates_in_range(course, course_filters)
+    course_filters = test_data.course_filters_start_date_none
+    assert if_dates_in_range(course, course_filters)
+    course = test_data.course_start_date_not_in_range
+    course_filters = test_data.course_filters_start_date_in_range
+    assert not if_dates_in_range(course, course_filters)
+
+
+def test_if_subset_competency_or_standard():
+    course = test_data.course_standards_competency_subset
+    course_filters = test_data.course_filters_standards_competency_subset
+    assert if_subset_competency_or_standard(course, course_filters)
+    course = test_data.course_standards_subset
+    course_filters = test_data.course_filters_standards_subset
+    assert not if_subset_competency_or_standard(course, course_filters)
+    course_filters = test_data.course_filters_standards_none
+    assert if_subset_competency_or_standard(course, course_filters)
+    course = test_data.course_standards_not_subset
+    course_filters = test_data.course_filters_standards_not_subset
+    assert not if_subset_competency_or_standard(course, course_filters)
 
 
 def test_course_repo():
