@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.api.enrolments import router as v1_router
+from app.api.courses import router as v1_router
 
 API_GATEWAY_STAGE_PREFIX = os.environ.get("STAGE_PREFIX", default="")
 API_GATEWAY_SERVICE_PREFIX = os.environ.get("SERVICE_PREFIX", default="")
