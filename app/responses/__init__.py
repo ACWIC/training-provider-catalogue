@@ -24,8 +24,6 @@ class ResponseFailure(BaseModel):
 
     @classmethod
     def _format_message(cls, message):
-        if isinstance(message, Exception):
-            return f"{message.__class__.__name__}: {message}"
         return message
 
     def __bool__(self):
@@ -34,23 +32,29 @@ class ResponseFailure(BaseModel):
     @classmethod
     def build_from_resource_error(cls, message=None):
         return cls(
-            type=FailureType.RESOURCE_ERROR, message=cls._format_message(message)
+            type=FailureType.RESOURCE_ERROR,
+            message=cls._format_message("RESOURCE_ERROR: " + str(message)),
         )
 
     @classmethod
     def build_from_system_error(cls, message=None):
-        return cls(type=FailureType.SYSTEM_ERROR, message=cls._format_message(message))
+        return cls(
+            type=FailureType.SYSTEM_ERROR,
+            message=cls._format_message("SYSTEM_ERROR: " + str(message)),
+        )
 
     @classmethod
-    def validation_error(cls, message=None):
+    def build_from_validation_error(cls, message=None):
         return cls(
-            type=FailureType.VALIDATION_ERROR, message=cls._format_message(message)
+            type=FailureType.VALIDATION_ERROR,
+            message=cls._format_message("VALIDATION_ERROR: " + str(message)),
         )
 
     @classmethod
     def build_from_unauthorised_error(cls, message=None):
         return cls(
-            type=FailureType.UNAUTHORISED_ERROR, message=cls._format_message(message)
+            type=FailureType.UNAUTHORISED_ERROR,
+            message=cls._format_message("UNAUTHORISED_ERROR: " + str(message)),
         )
 
 
@@ -59,15 +63,11 @@ class ResponseSuccess(BaseModel):
     type: SuccessType = SuccessType.SUCCESS
     message: str = "Success"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._build()
-
     def __bool__(self):
         return True
 
-    def _build(self):
+    def build(self):
         content = jsonable_encoder(
             {"value": self.value, "message": self.message, "type": self.type}
         )
-        return JSONResponse(content=content, status_code=self.type)
+        return JSONResponse(content=content, status_code=self.type.value)

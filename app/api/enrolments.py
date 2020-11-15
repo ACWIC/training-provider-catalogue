@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from app.repositories.s3_course_repo import S3CourseRepo
 from app.repositories.s3_enrolment_repo import S3EnrolmentRepo
@@ -21,8 +21,8 @@ enrolment_repo = S3EnrolmentRepo()
 
 @router.get("/search_course/")
 def search_course(
-    industry_standards: Optional[str] = None,
-    competency: Optional[str] = None,
+    industry_standards: Optional[List[str]] = Query(None),
+    competency: Optional[List[str]] = Query(None),
     location: Optional[str] = None,
     from_date: Optional[datetime] = None,
     to_date: Optional[datetime] = None,
@@ -48,7 +48,7 @@ def search_course(
 
 @router.get("/search_course_by_standards/")
 def search_course_by_standards(
-    industry_standards: Optional[str] = None,
+    industry_standards: Optional[List[str]] = Query(None),
 ):
     """
     Search Courses using filters
@@ -65,7 +65,7 @@ def search_course_by_standards(
 
 @router.get("/search_course_by_competency/")
 def search_course_by_competency(
-    competency: Optional[str] = None,
+    competency: Optional[List[str]] = Query(None),
 ):
     """
     Search Courses using filters

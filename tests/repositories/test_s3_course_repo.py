@@ -9,8 +9,15 @@ from unittest.mock import patch
 
 import app.repositories.course_repo
 from app.config import settings
-from app.repositories.s3_course_repo import S3CourseRepo, filters_match
+from app.repositories.s3_course_repo import (
+    S3CourseRepo,
+    filters_match,
+    if_dates_in_range,
+    if_subset_competency_or_standard,
+)
 from tests.test_data.course_data_provider import CourseDataProvider
+
+test_data = CourseDataProvider()
 
 
 @patch("boto3.client")
@@ -29,19 +36,17 @@ def test_search_course(boto_client, json_loads):
     Ensure the S3CourseRepo returns an object with OK data
     and that an appropriate boto3 put call was made.
     """
-    course_id = CourseDataProvider().sample_course_id
+    course_id = test_data.sample_course_id
     repo = S3CourseRepo()
     settings.COURSE_BUCKET = "some-bucket"
-    course = CourseDataProvider().sample_course_dict
-    request = CourseDataProvider().sample_search_course
+    course = test_data.sample_course_dict
+    request = test_data.sample_search_course
 
     boto_client.return_value.list_objects = list_objects_sample_content
     json_loads.return_value = course
     courses_list = repo.search_course(request)
 
-    assert courses_list == {
-        "courses_list": [{"Course": CourseDataProvider().sample_course_dict}]
-    }
+    assert courses_list == {"courses_list": [{"Course": test_data.sample_course_dict}]}
 
     boto_client.return_value.get_object.assert_called_once_with(
         Key=f"{course_id}.json",
@@ -58,8 +63,8 @@ def test_search_course_empty_list(boto_client, json_loads):
     """
     repo = S3CourseRepo()
     settings.COURSE_BUCKET = "some-bucket"
-    course = CourseDataProvider().sample_course_dict
-    request = CourseDataProvider().sample_search_course
+    course = test_data.sample_course_dict
+    request = test_data.sample_search_course
 
     boto_client.return_value.list_objects = list_objects_sample_content_empty
     json_loads.return_value = course
@@ -69,12 +74,37 @@ def test_search_course_empty_list(boto_client, json_loads):
 
 
 def test_filters_match():
-    course = CourseDataProvider().sample_course_dict
-    course_filters = CourseDataProvider().sample_search_course_dict
-    course_filters1 = CourseDataProvider().sample_search_course_dict1
+    course = test_data.sample_course_dict
+    course_filters = test_data.sample_search_course_dict
+    course_filters1 = test_data.sample_search_course_dict1
 
     assert filters_match(course, course_filters)
     assert not filters_match(course, course_filters1)
+
+
+def test_if_dates_in_range():
+    course = test_data.course_start_date_in_range
+    course_filters = test_data.course_filters_start_date_in_range
+    assert if_dates_in_range(course, course_filters)
+    course_filters = test_data.course_filters_start_date_none
+    assert if_dates_in_range(course, course_filters)
+    course = test_data.course_start_date_not_in_range
+    course_filters = test_data.course_filters_start_date_in_range
+    assert not if_dates_in_range(course, course_filters)
+
+
+def test_if_subset_competency_or_standard():
+    course = test_data.course_standards_competency_subset
+    course_filters = test_data.course_filters_standards_competency_subset
+    assert if_subset_competency_or_standard(course, course_filters)
+    course = test_data.course_standards_subset
+    course_filters = test_data.course_filters_standards_subset
+    assert not if_subset_competency_or_standard(course, course_filters)
+    course_filters = test_data.course_filters_standards_none
+    assert if_subset_competency_or_standard(course, course_filters)
+    course = test_data.course_standards_not_subset
+    course_filters = test_data.course_filters_standards_not_subset
+    assert not if_subset_competency_or_standard(course, course_filters)
 
 
 def test_course_repo():
@@ -87,10 +117,10 @@ def list_objects_sample_content(Bucket):
     return {
         "Contents": [
             {
-                "course_id": CourseDataProvider().sample_course_id,
+                "course_id": test_data.sample_course_id,
                 "bucket": Bucket,
                 # "prefix": Prefix,
-                "Key": CourseDataProvider().sample_course_id + ".json",
+                "Key": test_data.sample_course_id + ".json",
             }
         ]
     }

@@ -17,7 +17,7 @@ class SearchCourse(BaseModel):
     def execute(self, course_filters: dict):
         try:
             course_filters = CourseFilters(**course_filters)
-            course = self.course_repo.search_course(course_filters=course_filters)
+            course = self.course_repo.search_course(course_filters)
             message = "Courses with with filters = " + str(course_filters)
         except Exception as e:
             return ResponseFailure.build_from_resource_error(message=e)
