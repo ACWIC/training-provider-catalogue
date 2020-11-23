@@ -4,9 +4,6 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Query
 
 from app.repositories.s3_course_repo import S3CourseRepo
-from app.repositories.s3_enrolment_repo import S3EnrolmentRepo
-from app.requests.enrolment_requests import NewEnrolmentRequest
-from app.use_cases.create_new_enrolment import CreateNewEnrolment
 from app.use_cases.filter_by_availability import FilterCourseByAvailabilty
 from app.use_cases.filter_by_competency import FilterCourseByCompetency
 from app.use_cases.filter_by_date import FilterCourseByDate
@@ -16,7 +13,6 @@ from app.use_cases.search_course import SearchCourse
 
 router = APIRouter()
 course_repo = S3CourseRepo()
-enrolment_repo = S3EnrolmentRepo()
 
 
 @router.get("/search_course/")
@@ -29,7 +25,24 @@ def search_course(
     availability: Optional[bool] = None,
 ):
     """
-    Search Courses using filters
+    Search Courses using filters\n
+    <b>course_name</b> is required.
+    <b>industry_standards</b> is a list of industry standard versions
+    this course confirms to.\n
+    <b>competency</b> is a list of competencies.\n
+    <b>location</b> is the location where course is conducted.
+    It is required.\n
+    <b>start_date</b> is in format ISO 8601 (YYYY-MM-DDTHH:mm:ss.sssZ).
+    It is the starting date of the course.
+    It is required.\n
+    <b>availability</b> is a boolean which is True or False depending
+    upon the availability of the course. It is required.\n
+    <b>hours_per_week</b> is the number of hours per week the course
+    demands from the students. It is a float value. It is required.\n
+    <b>duration</b> is the total duration of course in string.
+    It is required.\n
+    <b>fees_from</b> is the minimum fee of the course.
+    It is a float value. It is required\n
     """
     inputs = {
         "industry_standards": industry_standards,
@@ -127,29 +140,6 @@ def search_course_by_availability(
         "availability": availability,
     }
     use_case = FilterCourseByAvailabilty(course_repo=course_repo)
-    response = use_case.execute(inputs)
-    if bool(response) is False:  # If request failed
-        raise HTTPException(status_code=response.type.value, detail=response.message)
-    return response
-
-
-@router.get("/enrolments/{enrolment_id}")
-def enrolments(enrolment_id: str):
-    """Getting an enrollment by ID will return the current
-    state of the enrollment, derived from the enrollment’s journal.
-    """
-    return {"your_enrolment_id": enrolment_id}
-
-
-@router.post("/enrolments")
-def create_enrolment(inputs: NewEnrolmentRequest):
-    """Posting an enrollment authorisation is a synchronous proccess that
-    immediately succeeds (or fails) to create an enrollment authorisation,
-    and assign it a unique enrollment authorisation id.
-
-    The initial state of the enrollment authorisation is “lodged”.
-    """
-    use_case = CreateNewEnrolment(enrolment_repo=enrolment_repo)
     response = use_case.execute(inputs)
     if bool(response) is False:  # If request failed
         raise HTTPException(status_code=response.type.value, detail=response.message)
