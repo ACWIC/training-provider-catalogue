@@ -11,7 +11,7 @@ class CourseDataProvider:  # (BaseModel):
     sample_course_start_date: datetime
 
     sample_search_course_dict: dict
-    sample_by_availabilty_dict: dict
+    sample_by_availability_dict: dict
     sample_by_competency_dict: dict
     sample_by_date_dict: dict
     sample_by_location_dict: dict
@@ -43,7 +43,7 @@ class CourseDataProvider:  # (BaseModel):
             fees_from=200,
             created=created,
         )
-        self.sample_course_dict = vars(self.sample_course)
+        self.sample_course_dict = self.sample_course.dict()
 
         # SearchCourseRequest Sample
         self.sample_search_course_dict = {
@@ -67,7 +67,7 @@ class CourseDataProvider:  # (BaseModel):
         self.sample_search_course1 = CourseFilters(**self.sample_search_course_dict1)
 
         # Filters Requests
-        self.sample_by_availabilty_dict = {"availability": True}
+        self.sample_by_availability_dict = {"availability": True}
         self.sample_by_competency_dict = {"competency": ["top rated", "experienced"]}
         self.sample_by_date_dict = {
             "from_date": from_date,
@@ -78,7 +78,7 @@ class CourseDataProvider:  # (BaseModel):
             "industry_standards": ["Police Check", "Security check"]
         }
 
-        self.sample_by_availabilty = CourseFilters(**self.sample_by_availabilty_dict)
+        self.sample_by_availability = CourseFilters(**self.sample_by_availability_dict)
         self.sample_by_competency = CourseFilters(**self.sample_by_competency_dict)
         self.sample_by_date = CourseFilters(**self.sample_by_date_dict)
         self.sample_by_location = CourseFilters(**self.sample_by_location_dict)

@@ -5,7 +5,7 @@ from app.repositories.course_repo import CourseRepo
 from app.responses import ResponseFailure, ResponseSuccess
 
 
-class FilterCourseByAvailabilty(BaseModel):
+class FilterCourseByAvailability(BaseModel):
     course_repo: CourseRepo
 
     class Config:

@@ -5,7 +5,7 @@ from unittest import mock
 
 from app.repositories.course_repo import CourseRepo
 from app.responses import FailureType, SuccessType
-from app.use_cases.filter_by_availability import FilterCourseByAvailabilty
+from app.use_cases.filter_by_availability import FilterCourseByAvailability
 from tests.test_data.course_data_provider import CourseDataProvider
 
 
@@ -18,8 +18,8 @@ def test_search_course_success():
     repo = mock.Mock(spec=CourseRepo)
     course = CourseDataProvider().sample_course
     course_list = {"courses_list": [course]}
-    request = CourseDataProvider().sample_by_availabilty_dict
-    use_case = FilterCourseByAvailabilty(course_repo=repo)
+    request = CourseDataProvider().sample_by_availability_dict
+    use_case = FilterCourseByAvailability(course_repo=repo)
 
     repo.search_course.return_value = course_list
     response = use_case.execute(request)
@@ -34,8 +34,8 @@ def test_search_course_failure():
     the response type should be "404-Resource Error".
     """
     repo = mock.Mock(spec=CourseRepo)
-    request = CourseDataProvider().sample_by_availabilty_dict
-    use_case = FilterCourseByAvailabilty(course_repo=repo)
+    request = CourseDataProvider().sample_by_availability_dict
+    use_case = FilterCourseByAvailability(course_repo=repo)
     repo.search_course.side_effect = Exception()
 
     response = use_case.execute(request)
