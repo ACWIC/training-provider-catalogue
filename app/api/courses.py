@@ -25,7 +25,19 @@ def search_course(
     availability: Optional[bool] = None,
 ):
     """
-    Search Courses using filters
+    This is a public, read-only API that allows Aged Care Provider (employer) to:\n
+    - search for courses meeting various criteria, so they can organise training for staff.\n
+    - see what industry standards the training provider supports\n\n
+    It is part of the interface standard because it allows employers to\n
+    federate search results from multiple training providers.\n
+    He can filter on the basis of:\n
+    **industry_standards** courses thats meet 1 or more IndustryStandards designations
+       eg Police Check, drivers licence, etc \n
+    **competency** courses thats meet 1 or more competencies\n
+    **location** specified location where the courses are being offered  \n
+    **from_date** first date of the date range, courses will be offered in \n
+    **to_date** last date of the date range, courses will be offered in\n
+    **availability** courses that are currently active / available with vacancies for students \n
     """
     inputs = {
         "industry_standards": industry_standards,
@@ -47,7 +59,9 @@ def search_course_by_standards(
     industry_standards: Optional[List[str]] = Query(None),
 ):
     """
-    Search Courses using filters
+    Aged Care Provider (employer) can filter courses on the basis of:\n
+    **industry_standards** courses thats meet 1 or more IndustryStandards designations
+       eg Police Check, drivers licence, etc \n
     """
     inputs = {
         "industry_standards": industry_standards,
@@ -64,7 +78,8 @@ def search_course_by_competency(
     competency: Optional[List[str]] = Query(None),
 ):
     """
-    Search Courses using filters
+    Aged Care Provider (employer) can filter courses on the basis of:\n
+    **competency** courses thats meet 1 or more competencies\n
     """
     inputs = {
         "competency": competency,
@@ -81,7 +96,8 @@ def search_course_by_location(
     location: Optional[str] = None,
 ):
     """
-    Search Courses using filters
+    Aged Care Provider (employer) can filter courses on the basis of:\n
+    **location** specified location where the courses are being offered  \n
     """
     inputs = {
         "location": location,
@@ -99,7 +115,9 @@ def search_course_by_date(
     to_date: Optional[datetime] = None,
 ):
     """
-    Search Courses using filters
+    Aged Care Provider (employer) can filter courses on the basis of:\n
+    **from_date** first date of the date range, courses will be offered in \n
+    **to_date** last date of the date range, courses will be offered in\n
     """
     inputs = {
         "from_date": from_date,
@@ -117,7 +135,8 @@ def search_course_by_availability(
     availability: Optional[bool] = None,
 ):
     """
-    Search Courses using filters
+    Aged Care Provider (employer) can filter courses on the basis of:\n
+    **availability** courses that are currently active / available with vacancies for students \n
     """
     inputs = {
         "availability": availability,
